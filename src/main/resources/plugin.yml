@@ -1,0 +1,15 @@
+name: ${name}
+version: ${version}
+main: kenjakuSkin.system.KenjakuSkin
+description: "${description}"
+author: "${author}"
+website: "${website}"
+api-version: "${apiVersion}"
+commands:
+  kenjakuskin:
+    description: "역겨워라. 어떻게 알았지?"
+    aliases: ks
+    permission: kenjakuskin.*
+permissions :
+  kenjakuskin.*:
+    default: op
