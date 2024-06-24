@@ -3,7 +3,6 @@ package kenjakuSkin.data;
 import kenjakuSkin.pair.CustomPair;
 import kenjakuSkin.skin.CustomSkin;
 import kenjakuSkin.system.KenjakuSkin;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -12,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 public class CustomData {
     public static String dataFolderPath = KenjakuSkin.plugin.getDataFolder().getPath();
@@ -106,9 +104,11 @@ public class CustomData {
         var path = Paths.get(dataFolderPath, parent, name + ".yml");
         if (Files.exists(path)) {
             var yml = YamlConfiguration.loadConfiguration(path.toFile());
-            return CustomPair.of(yml.getString("texture"), yml.getString("signature"));
+            var texture = yml.getString("texture");
+            var signature = yml.getString("signature");
+            if (texture != null && signature != null) return CustomPair.of(texture, signature);
         }
-        return CustomSkin.profileSkinPair(Bukkit.createProfile(UUID.randomUUID()));
+        return CustomSkin.randomProfileSkinPair();
     }
 
     public static void info(String message) {

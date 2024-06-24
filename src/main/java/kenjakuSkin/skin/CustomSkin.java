@@ -5,9 +5,16 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import kenjakuSkin.data.CustomData;
 import kenjakuSkin.pair.CustomPair;
 import kenjakuSkin.system.KenjakuSkin;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class CustomSkin {
+    public static CustomPair<String, String> randomProfileSkinPair() {
+        return CustomSkin.profileSkinPair(randomProfile());
+    }
+
     public static CustomPair<String, String> profileSkinPair(Player player) {
         return profileSkinPair(player.getPlayerProfile());
     }
@@ -15,7 +22,7 @@ public class CustomSkin {
     public static CustomPair<String, String> profileSkinPair(PlayerProfile playerProfile) {
         return playerProfile.getProperties().stream().map(
             profileProperty -> CustomPair.of(profileProperty.getValue(), profileProperty.getSignature())
-        ).findFirst().get();
+        ).findFirst().orElseGet(CustomSkin::randomProfileSkinPair);
     }
 
     public static void reset(Player player) {
@@ -39,6 +46,12 @@ public class CustomSkin {
 
     public static void loadLastSkin(Player player) {
         KenjakuSkin.skins.put(player, CustomData.skinPair("last", CustomData.uuid(player)));
+    }
+
+    public static PlayerProfile randomProfile() {
+        var playerProfile = Bukkit.createProfile(UUID.randomUUID());
+        playerProfile.getProperties().add(new ProfileProperty("textures", "", ""));
+        return playerProfile;
     }
 
     public static void set(Player player, String name) {
